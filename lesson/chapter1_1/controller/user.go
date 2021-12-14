@@ -11,7 +11,7 @@ type User struct {}
 
 func (ctr *User) Login(c *gin.Context) {
 	mobile := c.PostForm("mobile")
-	captcha := c.PostForm("captcha")
+	code := c.PostForm("code")
 
 	// 校验手机号逻辑
 	if mobile == "" {
@@ -26,15 +26,15 @@ func (ctr *User) Login(c *gin.Context) {
 	}
 
 	// 校验手机号逻辑
-	if captcha == "" {
+	if code == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "验证码不能为空"})
 		return
 	}
 
-	if len(captcha) != 4 {
+	if len(code) != 4 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "验证码为4位"})
 		return
 	}
 
-	fmt.Println(mobile, captcha)
+	fmt.Println(mobile, code)
 }
