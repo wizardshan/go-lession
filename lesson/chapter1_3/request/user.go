@@ -1,8 +1,23 @@
 package request
 
-import "go-web/lesson/chapter1_3/request/captcha"
+import (
+	"errors"
+	"time"
+)
 
-type UserLogin struct {
-	Mobile
-	captcha.Code
+type UserRegister struct {
+	Mobile string `form:"mobile" valid:"required~手机号不能为空,numeric~手机号码应该为数字型,IsMobile~手机号码格式错误"`
+	Code string `form:"code" valid:"required~验证码不能为空,numeric~验证码应该为数字型"`
+	Password string `form:"password" valid:"required~密码不能为空,stringlength(6|18)~密码6-18个字符"`
+	RePassword string `form:"rePassword" valid:"required~重复密码不能为空,stringlength(6|18)~重复密码6-18个字符"`
+	Nickname string `form:"nickname" valid:"required~昵称不能为空,stringlength(2|10)~昵称2-10个字符"`
+	Birthday time.Time `form:"birthday" `
+}
+
+func (req *UserRegister) Validate() error {
+	if req.Password != req.RePassword {
+		return errors.New("两次密码不一致")
+	}
+
+	return nil
 }

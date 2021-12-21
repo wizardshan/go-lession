@@ -2,7 +2,6 @@ package controller
 
 import (
 	"fmt"
-	validator "github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"go-web/lesson/chapter1_3/request"
 	"net/http"
@@ -10,14 +9,9 @@ import (
 
 type User struct {}
 
-func (ctr *User) Login(c *gin.Context) {
-	var request request.UserLogin
-	if err := c.ShouldBind(&request); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	if _, err := validator.ValidateStruct(request); err != nil {
+func (ctr *User) Register(c *gin.Context) {
+	var request request.UserRegister
+	if err := c.ShouldB(&request); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
