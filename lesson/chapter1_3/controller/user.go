@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-type User struct {}
+type User struct{}
 
 func (ctr *User) Register(c *gin.Context) {
 	var request request.UserRegister

@@ -20,4 +20,3 @@ func (req *MobileS) Valid(value string) bool {
 	b, _ := regexp.MatchString(`^(1[1-9][0-9]\d{8})$`, value)
 	return b
 }
-

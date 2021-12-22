@@ -8,14 +8,13 @@ import (
 	"net/http"
 )
 
-type Article struct {}
+type Article struct{}
 
 func (ctr *Article) List(c *gin.Context) {
 
-
-	articles := []*domain.Article {
-		{ID:1, Title: "标题1", Content: "内容1", ImageUrl: "1.jpg", Author: &domain.Author{ID: 1, Name: "作者1", Desc: "介绍1"}},
-		{ID:2, Title: "标题2", Content: "内容2", ImageUrl: "2.jpg", Author: &domain.Author{ID: 2, Name: "作者2", Desc: "介绍2"}},
+	articles := []*domain.Article{
+		{ID: 1, Title: "标题1", Content: "内容1", ImageURL: "1.jpg", Author: &domain.Author{ID: 1, Name: "作者1", Desc: "介绍1"}},
+		{ID: 2, Title: "标题2", Content: "内容2", ImageURL: "2.jpg", Author: &domain.Author{ID: 2, Name: "作者2", Desc: "介绍2"}},
 	}
 
 	var response []*response.ArticleList
@@ -25,7 +24,7 @@ func (ctr *Article) List(c *gin.Context) {
 }
 
 func (ctr *Article) Detail(c *gin.Context) {
-	article := &domain.Article{ID: 1, Title: "标题1", Content: "内容1", ImageUrl: "1.jpg"}
+	article := &domain.Article{ID: 1, Title: "标题1", Content: "内容1", ImageURL: "1.jpg"}
 
 	var response response.Article
 	copier.Copy(&response, article)

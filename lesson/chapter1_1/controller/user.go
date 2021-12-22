@@ -7,7 +7,7 @@ import (
 	"regexp"
 )
 
-type User struct {}
+type User struct{}
 
 func (ctr *User) Login(c *gin.Context) {
 	mobile := c.PostForm("mobile")

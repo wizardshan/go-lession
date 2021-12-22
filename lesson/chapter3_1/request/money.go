@@ -5,12 +5,13 @@ import (
 	"github.com/shopspring/decimal"
 	"strconv"
 )
-type Money struct {
+
+type MoneyS struct {
 	Val int
 }
 
-func (req *Money) UnmarshalJSON(b []byte) error {
-	float, err := strconv.ParseFloat(string(b),64)
+func (req *MoneyS) UnmarshalJSON(b []byte) error {
+	float, err := strconv.ParseFloat(string(b), 64)
 	if err != nil {
 		return err
 	}
@@ -23,7 +24,6 @@ func (req *Money) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (req *Money) Value() int {
+func (req *MoneyS) Value() int {
 	return req.Val
 }
-

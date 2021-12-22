@@ -7,6 +7,6 @@ import (
 type ImageURL string
 
 func (resp ImageURL) MarshalJSON() ([]byte, error) {
-	url := fmt.Sprintf(`"%s"`, "http://img.test.com/" + resp)
+	url := fmt.Sprintf(`"%s"`, "http://img.test.com/"+resp)
 	return []byte(url), nil
 }

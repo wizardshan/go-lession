@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-type User struct {}
+type User struct{}
 
 func (ctr *User) Login(c *gin.Context) {
 	var request request.UserLogin
@@ -27,5 +27,3 @@ func (ctr *User) Register(c *gin.Context) {
 
 	fmt.Println(request.Mobile, request.Code, request.Password, request.RePassword, request.Nickname, request.Birthday)
 }
-
-

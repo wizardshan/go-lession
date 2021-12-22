@@ -13,4 +13,3 @@ func main() {
 	engine.GET("/column", ctrColumn.Detail)
 	engine.Run()
 }
-

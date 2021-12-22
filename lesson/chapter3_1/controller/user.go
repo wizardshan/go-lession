@@ -10,7 +10,7 @@ import (
 	"net/http"
 )
 
-type User struct {}
+type User struct{}
 
 func (ctr *User) Cash(c *gin.Context) {
 	var request request.UserCash
@@ -36,6 +36,9 @@ func (ctr *User) Update(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
 	fmt.Println(request.HeaderImage.Name())
+	user := &domain.User{ID: 1, Nickname: "用户昵称", HeaderImage: request.HeaderImage.Name(), Money: 12345}
+	var response response.User
+	copier.Copy(&response, user)
+	c.JSON(http.StatusOK, gin.H{"data": response})
 }

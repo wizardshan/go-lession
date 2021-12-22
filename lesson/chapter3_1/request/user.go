@@ -1,7 +1,7 @@
 package request
 
 type UserCash struct {
-	Money Money `form:"money"`
+	Money MoneyS `form:"money"`
 }
 
 type UserUpdate struct {

@@ -7,7 +7,7 @@ import (
 	"regexp"
 )
 
-type Captcha struct {}
+type Captcha struct{}
 
 func (ctr *Captcha) Send(c *gin.Context) {
 	mobile := c.PostForm("mobile")

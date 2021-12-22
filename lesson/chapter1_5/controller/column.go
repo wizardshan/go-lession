@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-type Column struct {}
+type Column struct{}
 
 func (ctr *Column) Create(c *gin.Context) {
 	var request request.ColumnCreate

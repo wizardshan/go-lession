@@ -12,7 +12,7 @@ type ColumnArticleCreate struct {
 
 type ColumnCreate struct {
 	column.TitleS
-	Article *ColumnArticleCreate `form:"article"`
+	Article  *ColumnArticleCreate  `form:"article"`
 	Articles []ColumnArticleCreate `form:"articles"`
 }
 

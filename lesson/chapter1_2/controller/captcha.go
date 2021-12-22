@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-type Captcha struct {}
+type Captcha struct{}
 
 func (ctr *Captcha) Send(c *gin.Context) {
 	var request request.Captcha

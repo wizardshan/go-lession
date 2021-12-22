@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-type User struct {}
+type User struct{}
 
 func (ctr *User) Login(c *gin.Context) {
 	var request request.User

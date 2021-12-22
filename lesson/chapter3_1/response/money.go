@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/shopspring/decimal"
 )
+
 type Money int
 
 func (resp Money) MarshalJSON() ([]byte, error) {
