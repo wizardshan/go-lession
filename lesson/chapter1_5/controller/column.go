@@ -19,7 +19,7 @@ func (ctr *Column) Create(c *gin.Context) {
 }
 
 func (ctr *Column) Detail(c *gin.Context) {
-	var request request.ColumnCreate
+	var request request.ColumnDetail
 	if err := c.ShouldB(&request); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

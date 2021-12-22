@@ -8,12 +8,12 @@ import (
 
 type UserLogin struct {
 	MobileS
-	captcha.Code
+	captcha.CodeS
 }
 
 type UserRegister struct {
 	MobileS
-	captcha.Code
+	captcha.CodeS
 	user.PasswordS
 	user.RePasswordS
 	user.NicknameS

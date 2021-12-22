@@ -18,4 +18,5 @@ type ColumnCreate struct {
 
 type ColumnDetail struct {
 	IDS
+	ArticleIsImportant *bool `form:"articleIsImportant"`
 }
