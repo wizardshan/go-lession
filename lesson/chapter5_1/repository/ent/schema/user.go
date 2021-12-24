@@ -7,24 +7,26 @@ import (
 	"entgo.io/ent/schema/mixin"
 )
 
-type GoodsCategory struct {
+type User struct {
 	ent.Schema
 }
 
-func (GoodsCategory) Fields() []ent.Field {
+func (User) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("name"),
+		field.String("mobile"),
+		field.String("nickname"),
 	}
 }
 
-func (GoodsCategory) Mixin() []ent.Mixin {
+func (User) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixin.Time{},
 	}
 }
 
-func (GoodsCategory) Edges() []ent.Edge {
+func (User) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("goods", Goods.Type),
+		edge.To("orders", Order.Type),
 	}
 }
+

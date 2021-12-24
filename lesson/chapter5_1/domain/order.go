@@ -4,7 +4,7 @@ import "time"
 
 type Order struct {
 	ID         int
-	CategoryID int
-	Name       string
+	UserID int
+	SN       string
 	CreateTime time.Time
 }

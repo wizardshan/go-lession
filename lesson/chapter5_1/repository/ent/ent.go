@@ -8,6 +8,7 @@ import (
 	"go-web/lesson/chapter5_1/repository/ent/goods"
 	"go-web/lesson/chapter5_1/repository/ent/goodscategory"
 	"go-web/lesson/chapter5_1/repository/ent/order"
+	"go-web/lesson/chapter5_1/repository/ent/user"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -34,6 +35,7 @@ func columnChecker(table string) func(string) error {
 		goods.Table:         goods.ValidColumn,
 		goodscategory.Table: goodscategory.ValidColumn,
 		order.Table:         order.ValidColumn,
+		user.Table:          user.ValidColumn,
 	}
 	check, ok := checks[table]
 	if !ok {

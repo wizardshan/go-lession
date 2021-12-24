@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"go-web/lesson/chapter5_1/repository/ent/order"
+	"go-web/lesson/chapter5_1/repository/ent/user"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -48,10 +49,29 @@ func (oc *OrderCreate) SetNillableUpdateTime(t *time.Time) *OrderCreate {
 	return oc
 }
 
+// SetUserID sets the "user_id" field.
+func (oc *OrderCreate) SetUserID(i int) *OrderCreate {
+	oc.mutation.SetUserID(i)
+	return oc
+}
+
+// SetNillableUserID sets the "user_id" field if the given value is not nil.
+func (oc *OrderCreate) SetNillableUserID(i *int) *OrderCreate {
+	if i != nil {
+		oc.SetUserID(*i)
+	}
+	return oc
+}
+
 // SetSn sets the "sn" field.
 func (oc *OrderCreate) SetSn(s string) *OrderCreate {
 	oc.mutation.SetSn(s)
 	return oc
+}
+
+// SetUser sets the "user" edge to the User entity.
+func (oc *OrderCreate) SetUser(u *User) *OrderCreate {
+	return oc.SetUserID(u.ID)
 }
 
 // Mutation returns the OrderMutation object of the builder.
@@ -196,6 +216,26 @@ func (oc *OrderCreate) createSpec() (*Order, *sqlgraph.CreateSpec) {
 			Column: order.FieldSn,
 		})
 		_node.Sn = value
+	}
+	if nodes := oc.mutation.UserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   order.UserTable,
+			Columns: []string{order.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: user.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

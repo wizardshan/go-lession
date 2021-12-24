@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"go-web/lesson/chapter5_1/repository/ent/order"
 	"go-web/lesson/chapter5_1/repository/ent/predicate"
+	"go-web/lesson/chapter5_1/repository/ent/user"
 	"math"
 
 	"entgo.io/ent/dialect/sql"
@@ -24,6 +25,8 @@ type OrderQuery struct {
 	order      []OrderFunc
 	fields     []string
 	predicates []predicate.Order
+	// eager-loading edges.
+	withUser *UserQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -58,6 +61,28 @@ func (oq *OrderQuery) Unique(unique bool) *OrderQuery {
 func (oq *OrderQuery) Order(o ...OrderFunc) *OrderQuery {
 	oq.order = append(oq.order, o...)
 	return oq
+}
+
+// QueryUser chains the current query on the "user" edge.
+func (oq *OrderQuery) QueryUser() *UserQuery {
+	query := &UserQuery{config: oq.config}
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(order.Table, order.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, order.UserTable, order.UserColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Order entity from the query.
@@ -241,10 +266,22 @@ func (oq *OrderQuery) Clone() *OrderQuery {
 		offset:     oq.offset,
 		order:      append([]OrderFunc{}, oq.order...),
 		predicates: append([]predicate.Order{}, oq.predicates...),
+		withUser:   oq.withUser.Clone(),
 		// clone intermediate query.
 		sql:  oq.sql.Clone(),
 		path: oq.path,
 	}
+}
+
+// WithUser tells the query-builder to eager-load the nodes that are connected to
+// the "user" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrderQuery) WithUser(opts ...func(*UserQuery)) *OrderQuery {
+	query := &UserQuery{config: oq.config}
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withUser = query
+	return oq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -310,8 +347,11 @@ func (oq *OrderQuery) prepareQuery(ctx context.Context) error {
 
 func (oq *OrderQuery) sqlAll(ctx context.Context) ([]*Order, error) {
 	var (
-		nodes = []*Order{}
-		_spec = oq.querySpec()
+		nodes       = []*Order{}
+		_spec       = oq.querySpec()
+		loadedTypes = [1]bool{
+			oq.withUser != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]interface{}, error) {
 		node := &Order{config: oq.config}
@@ -323,6 +363,7 @@ func (oq *OrderQuery) sqlAll(ctx context.Context) ([]*Order, error) {
 			return fmt.Errorf("ent: Assign called without calling ScanValues")
 		}
 		node := nodes[len(nodes)-1]
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	if err := sqlgraph.QueryNodes(ctx, oq.driver, _spec); err != nil {
@@ -331,6 +372,33 @@ func (oq *OrderQuery) sqlAll(ctx context.Context) ([]*Order, error) {
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+
+	if query := oq.withUser; query != nil {
+		ids := make([]int, 0, len(nodes))
+		nodeids := make(map[int][]*Order)
+		for i := range nodes {
+			fk := nodes[i].UserID
+			if _, ok := nodeids[fk]; !ok {
+				ids = append(ids, fk)
+			}
+			nodeids[fk] = append(nodeids[fk], nodes[i])
+		}
+		query.Where(user.IDIn(ids...))
+		neighbors, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, n := range neighbors {
+			nodes, ok := nodeids[n.ID]
+			if !ok {
+				return nil, fmt.Errorf(`unexpected foreign-key "user_id" returned %v`, n.ID)
+			}
+			for i := range nodes {
+				nodes[i].Edges.User = n
+			}
+		}
+	}
+
 	return nodes, nil
 }
 

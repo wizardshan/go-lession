@@ -12,11 +12,13 @@ import (
 
 type Goods struct{
 	repo *repository.Goods
+	repoCategory *repository.GoodsCategory
 }
 
-func NewGoods(repo *repository.Goods) *Goods {
+func NewGoods(repo *repository.Goods, repoCategory *repository.GoodsCategory) *Goods {
 	ctr := new(Goods)
 	ctr.repo = repo
+	ctr.repoCategory = repoCategory
 	return ctr
 }
 
@@ -31,7 +33,7 @@ func (ctr *Goods) V1List(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": data})
 }
 
-func (ctr *Goods) V1Category(c *gin.Context) {
+func (ctr *Goods) Category(c *gin.Context) {
 
 	var request request.GoodsCategory
 	if err := c.ShouldB(&request); err != nil {
@@ -39,7 +41,7 @@ func (ctr *Goods) V1Category(c *gin.Context) {
 		return
 	}
 
-	data, err := ctr.repo.Category(c.Request.Context(), request.ID)
+	data, err := ctr.repoCategory.List(c.Request.Context(), request.ID)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
