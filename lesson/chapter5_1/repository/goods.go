@@ -32,20 +32,20 @@ func (repo *Goods) V2List(ctx context.Context) []*domain.Goods {
 
 func (repo *Goods) Get(ctx context.Context, id int) *domain.Goods {
 	query := repo.db.Goods.Query().WithCategory().Where(goods.ID(id))
-	return goodsSelect(ctx, query)
+	return repo.fetch(ctx, query)
 }
 
 func (repo *Goods) List(ctx context.Context) []*domain.Goods {
 	query := repo.db.Goods.Query().WithCategory()
-	return goodsSelectMany(ctx, query)
+	return repo.fetchAll(ctx, query)
 }
 
 func (repo *Goods) Create(ctx context.Context, domain *domain.Goods) *domain.Goods {
 	create := repo.db.Goods.Create().SetName(domain.Name).SetCategoryID(domain.CategoryID)
-	return goodsSave(ctx, create)
+	return repo.save(ctx, create)
 }
 
-func goodsSelect(ctx context.Context, query *ent.GoodsQuery) *domain.Goods {
+func (repo *Goods) fetch(ctx context.Context, query *ent.GoodsQuery) *domain.Goods {
 	goods := query.FirstX(ctx)
 	if goods == nil {
 		return nil
@@ -56,7 +56,7 @@ func goodsSelect(ctx context.Context, query *ent.GoodsQuery) *domain.Goods {
 	return domain
 }
 
-func goodsSelectMany(ctx context.Context, query *ent.GoodsQuery) []*domain.Goods {
+func (repo *Goods) fetchAll(ctx context.Context, query *ent.GoodsQuery) []*domain.Goods {
 	goods := query.AllX(ctx)
 
 	domains := []*domain.Goods{}
@@ -64,7 +64,7 @@ func goodsSelectMany(ctx context.Context, query *ent.GoodsQuery) []*domain.Goods
 	return domains
 }
 
-func goodsSave(ctx context.Context, create *ent.GoodsCreate) *domain.Goods {
+func (repo *Goods) save(ctx context.Context, create *ent.GoodsCreate) *domain.Goods {
 	goods := create.SaveX(ctx)
 	if goods == nil {
 		return nil
