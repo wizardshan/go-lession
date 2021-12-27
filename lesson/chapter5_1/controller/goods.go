@@ -12,13 +12,11 @@ import (
 
 type Goods struct{
 	repo *repository.Goods
-	repoCategory *repository.GoodsCategory
 }
 
-func NewGoods(repo *repository.Goods, repoCategory *repository.GoodsCategory) *Goods {
+func NewGoods(repo *repository.Goods) *Goods {
 	ctr := new(Goods)
 	ctr.repo = repo
-	ctr.repoCategory = repoCategory
 	return ctr
 }
 
@@ -30,7 +28,7 @@ func (ctr *Goods) Category(c *gin.Context) {
 		return
 	}
 
-	data := ctr.repoCategory.List(c.Request.Context(), request.ID)
+	data := ctr.repo.Category(c.Request.Context(), request.ID)
 	c.JSON(http.StatusOK, gin.H{"data": data})
 }
 

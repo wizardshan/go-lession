@@ -29,8 +29,7 @@ func main() {
 	engine := gin.New()
 
 	repoGoods := repository.NewGoods(db)
-	repoGoodsCategory := repository.NewGoodsCategory(db)
-	ctrGoods := controller.NewGoods(repoGoods, repoGoodsCategory)
+	ctrGoods := controller.NewGoods(repoGoods)
 	engine.GET("/goods/category", ctrGoods.Category)
 	engine.GET("/v1/goods", ctrGoods.V1List)
 	engine.GET("/v2/goods", ctrGoods.V2List)
