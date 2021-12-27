@@ -16,7 +16,7 @@ func NewGoodsCategory(db *ent.Client) *GoodsCategory {
 	return repo
 }
 
-func (repo *GoodsCategory) List(ctx context.Context, id int) (*ent.GoodsCategory, error) {
-	return repo.db.GoodsCategory.Query().WithGoods().Where(goodscategory.ID(id)).First(ctx)
+func (repo *GoodsCategory) List(ctx context.Context, id int) *ent.GoodsCategory {
+	return repo.db.GoodsCategory.Query().WithGoods().Where(goodscategory.ID(id)).FirstX(ctx)
 }
 

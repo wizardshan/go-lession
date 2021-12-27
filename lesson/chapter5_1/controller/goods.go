@@ -22,17 +22,6 @@ func NewGoods(repo *repository.Goods, repoCategory *repository.GoodsCategory) *G
 	return ctr
 }
 
-func (ctr *Goods) V1List(c *gin.Context) {
-	data, err := ctr.repo.V1List(c.Request.Context())
-
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"data": data})
-}
-
 func (ctr *Goods) Category(c *gin.Context) {
 
 	var request request.GoodsCategory
@@ -41,41 +30,56 @@ func (ctr *Goods) Category(c *gin.Context) {
 		return
 	}
 
-	data, err := ctr.repoCategory.List(c.Request.Context(), request.ID)
+	data := ctr.repoCategory.List(c.Request.Context(), request.ID)
+	c.JSON(http.StatusOK, gin.H{"data": data})
+}
 
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
+func (ctr *Goods) V1List(c *gin.Context) {
+	data := ctr.repo.V1List(c.Request.Context())
 	c.JSON(http.StatusOK, gin.H{"data": data})
 }
 
 func (ctr *Goods) V2List(c *gin.Context) {
 
-	var goods []*domain.Goods
-	err := ctr.repo.V2List(c.Request.Context(), &goods)
-
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"data": goods})
+	data := ctr.repo.V2List(c.Request.Context())
+	c.JSON(http.StatusOK, gin.H{"data": data})
 }
 
 func (ctr *Goods) V3List(c *gin.Context) {
 
-	var goods []*domain.Goods
-	err := ctr.repo.V2List(c.Request.Context(), &goods)
+	data := ctr.repo.V2List(c.Request.Context())
 
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	var response []*response.Goods
-	mapper.Map(&response, goods)
+	response := []*response.Goods{}
+	mapper.Map(&response, data)
 	c.JSON(http.StatusOK, gin.H{"data": response})
 }
+
+func (ctr *Goods) Get(c *gin.Context) {
+	data := ctr.repo.Get(c.Request.Context(), 1)
+
+	response := new(response.Goods)
+	mapper.Map(&response, data)
+	c.JSON(http.StatusOK, gin.H{"data": response})
+}
+
+func (ctr *Goods) List(c *gin.Context) {
+
+	data := ctr.repo.List(c.Request.Context())
+
+	response := []*response.Goods{}
+	mapper.Map(&response, data)
+	c.JSON(http.StatusOK, gin.H{"data": response})
+}
+
+func (ctr *Goods) Create(c *gin.Context) {
+
+	goods := &domain.Goods{Name: "商品", CategoryID: 1}
+	data := ctr.repo.Create(c.Request.Context(), goods)
+
+	response := new(response.Goods)
+	mapper.Map(&response, data)
+	c.JSON(http.StatusOK, gin.H{"data": response})
+}
+
+
 

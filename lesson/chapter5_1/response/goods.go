@@ -2,7 +2,7 @@ package response
 
 type Goods struct {
 	ID         int `json:"id"`
-	Category GoodsCategory `json:"category"`
+	Category *GoodsCategory `json:"category"`
 	Name       string `json:"name"`
 	CreateTime DateTime `json:"createTime"`
 }

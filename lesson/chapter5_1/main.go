@@ -36,10 +36,9 @@ func main() {
 	engine.GET("/v2/goods", ctrGoods.V2List)
 	engine.GET("/v3/goods", ctrGoods.V3List)
 
-	repoUser := repository.NewUser(db)
-	ctrUser := controller.NewUser(repoUser)
-	engine.GET("/user/register", ctrUser.Register)
-	engine.GET("/users/:id", ctrUser.Get)
-	engine.GET("/users", ctrUser.List)
+	engine.GET("/goods/:id", ctrGoods.Get)
+	engine.GET("/goods", ctrGoods.List)
+	engine.POST("/goods", ctrGoods.Create)
+
 	engine.Run()
 }
