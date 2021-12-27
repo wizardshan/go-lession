@@ -5,4 +5,5 @@ type User struct {
 	Nickname    string   `json:"nickname"`
 	HeaderImage ImageURL `json:"headerImage"`
 	Money       Money    `json:"money"`
+	CreateTime DateTime `json:"createTime"`
 }
