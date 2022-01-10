@@ -13,6 +13,8 @@ func main() {
 	ctrUser := controller.NewUser(repoUser)
 	engine.GET("/user/signs", ctrUser.Signs)
 	engine.GET("/user/signs/v1", ctrUser.SignsV1)
+	engine.GET("/user/signs/v2", ctrUser.SignsV2)
+	engine.GET("/user/signs/v3", ctrUser.SignsV3)
 
 	engine.Run()
 }

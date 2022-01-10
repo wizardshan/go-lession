@@ -1,7 +1,6 @@
 package date
 
 import (
-	"go-web/lesson/chapter5_1/pkg/timelayout"
 	"time"
 )
 
@@ -11,16 +10,16 @@ var Weekdays = 7
 type Week struct {
 }
 
-func (w *Week) CurrentDates() []string {
+func (d *Week) AllDays() []string {
 	now := time.Now()
 	index := int(now.Weekday())
 
-	dates := make([]string, Weekdays)
+	days := make([]string, Weekdays)
 	for i := 0; i < Weekdays; i++ {
-		dates[i] = now.AddDate(0, 0, i - index).Format(timelayout.Ymd)
+		days[i] = now.AddDate(0, 0, i - index).Format(LayoutYmd)
 	}
 
-	return dates
+	return days
 }
 
 

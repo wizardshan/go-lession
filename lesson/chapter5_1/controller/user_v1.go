@@ -10,26 +10,26 @@ import (
 
 func (ctr *User) SignsV1(c *gin.Context) {
 
-	dates := ctr.getCurrentWeekDates()
+	days := ctr.AllDaysOfWeek()
 
-	signs := ctr.repo.Signs(c.Request.Context(), dates)
+	signs := ctr.repo.Signs(c.Request.Context(), days)
 
-	response := ctr.transformSigns(signs, dates)
+	response := ctr.transformSigns(signs, days)
 
 	c.JSON(http.StatusOK, gin.H{"data": response})
 }
 
-func (ctr *User) getCurrentWeekDates() []string {
+func (ctr *User) AllDaysOfWeek() []string {
 	now := time.Now()
 	index := int(now.Weekday())
 
 	weekdays := 7 // 每周七天 用变量名自解释，消除隐性知识
-	dates := make([]string, weekdays)
+	days := make([]string, weekdays)
 	for i := 0; i < weekdays; i++ {
-		dates[i] = now.AddDate(0, 0, i - index).Format(ctr.getDateFormatLayout())
+		days[i] = now.AddDate(0, 0, i - index).Format(ctr.getDateFormatLayout())
 	}
 
-	return dates
+	return days
 }
 
 func (ctr *User) transformSigns(signs []*domain.UserSign, dates []string) map[string]bool {

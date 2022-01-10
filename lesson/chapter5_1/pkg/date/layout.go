@@ -1,5 +1,5 @@
-package timelayout
+package date
 
-var Ymd = "2006-01-02"
+var LayoutYmd = "2006-01-02"
 
-var YmdHis = "2006-01-02 15:04:05"
+var LayoutYmdHis = "2006-01-02 15:04:05"

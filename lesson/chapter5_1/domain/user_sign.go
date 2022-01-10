@@ -1,7 +1,7 @@
 package domain
 
 import (
-	"go-web/lesson/chapter5_1/pkg/timelayout"
+	"go-web/lesson/chapter5_1/pkg/date"
 	"time"
 )
 
@@ -16,7 +16,7 @@ type UserSigns []*UserSign
 func (dom UserSigns) TransformMap() map[string]*UserSign {
 	signsMap := make(map[string]*UserSign)
 	for _, s := range dom {
-		k := s.Date.Format(timelayout.Ymd)
+		k := s.Date.Format(date.LayoutYmd)
 		signsMap[k] = s
 	}
 
