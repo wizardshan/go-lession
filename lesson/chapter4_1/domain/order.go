@@ -1,6 +1,10 @@
 package domain
 
-import "time"
+import (
+	"time"
+)
+
+type Orders []*Order
 
 type Order struct {
 	ID         int

@@ -11,7 +11,7 @@ func main() {
 
 	repoOrder := repository.NewOrder()
 	ctrOrder := controller.NewOrder(repoOrder)
-	engine.GET("/orders/:id", ctrOrder.Get)
+	engine.GET("/order", ctrOrder.Get)
 	engine.GET("/orders/my", ctrOrder.My)
 	engine.GET("/orders", ctrOrder.List)
 

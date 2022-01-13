@@ -2,6 +2,8 @@ package do
 
 import "time"
 
+type Users []*User
+
 type User struct {
 	ID          int
 	Mobile      string
