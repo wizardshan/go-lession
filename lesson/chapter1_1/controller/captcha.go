@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"regexp"
@@ -24,5 +23,5 @@ func (ctr *Captcha) Send(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(mobile)
+	c.JSON(http.StatusBadRequest, gin.H{"mobile": mobile})
 }

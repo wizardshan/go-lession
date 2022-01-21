@@ -8,40 +8,40 @@ import (
 )
 
 var (
-	// GoodsColumns holds the columns for the "goods" table.
-	GoodsColumns = []*schema.Column{
+	// ItemsColumns holds the columns for the "items" table.
+	ItemsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "create_time", Type: field.TypeTime},
 		{Name: "update_time", Type: field.TypeTime},
 		{Name: "name", Type: field.TypeString},
 		{Name: "category_id", Type: field.TypeInt, Nullable: true},
 	}
-	// GoodsTable holds the schema information for the "goods" table.
-	GoodsTable = &schema.Table{
-		Name:       "goods",
-		Columns:    GoodsColumns,
-		PrimaryKey: []*schema.Column{GoodsColumns[0]},
+	// ItemsTable holds the schema information for the "items" table.
+	ItemsTable = &schema.Table{
+		Name:       "items",
+		Columns:    ItemsColumns,
+		PrimaryKey: []*schema.Column{ItemsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "goods_goods_categories_goods",
-				Columns:    []*schema.Column{GoodsColumns[4]},
-				RefColumns: []*schema.Column{GoodsCategoriesColumns[0]},
+				Symbol:     "items_item_categories_items",
+				Columns:    []*schema.Column{ItemsColumns[4]},
+				RefColumns: []*schema.Column{ItemCategoriesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
 	}
-	// GoodsCategoriesColumns holds the columns for the "goods_categories" table.
-	GoodsCategoriesColumns = []*schema.Column{
+	// ItemCategoriesColumns holds the columns for the "item_categories" table.
+	ItemCategoriesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "create_time", Type: field.TypeTime},
 		{Name: "update_time", Type: field.TypeTime},
 		{Name: "name", Type: field.TypeString},
 	}
-	// GoodsCategoriesTable holds the schema information for the "goods_categories" table.
-	GoodsCategoriesTable = &schema.Table{
-		Name:       "goods_categories",
-		Columns:    GoodsCategoriesColumns,
-		PrimaryKey: []*schema.Column{GoodsCategoriesColumns[0]},
+	// ItemCategoriesTable holds the schema information for the "item_categories" table.
+	ItemCategoriesTable = &schema.Table{
+		Name:       "item_categories",
+		Columns:    ItemCategoriesColumns,
+		PrimaryKey: []*schema.Column{ItemCategoriesColumns[0]},
 	}
 	// OrdersColumns holds the columns for the "orders" table.
 	OrdersColumns = []*schema.Column{
@@ -81,14 +81,14 @@ var (
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
-		GoodsTable,
-		GoodsCategoriesTable,
+		ItemsTable,
+		ItemCategoriesTable,
 		OrdersTable,
 		UsersTable,
 	}
 )
 
 func init() {
-	GoodsTable.ForeignKeys[0].RefTable = GoodsCategoriesTable
+	ItemsTable.ForeignKeys[0].RefTable = ItemCategoriesTable
 	OrdersTable.ForeignKeys[0].RefTable = UsersTable
 }

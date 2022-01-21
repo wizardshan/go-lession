@@ -9,8 +9,8 @@ import (
 
 	"go-web/lesson/chapter6_1/repository/ent/migrate"
 
-	"go-web/lesson/chapter6_1/repository/ent/goods"
-	"go-web/lesson/chapter6_1/repository/ent/goodscategory"
+	"go-web/lesson/chapter6_1/repository/ent/item"
+	"go-web/lesson/chapter6_1/repository/ent/itemcategory"
 	"go-web/lesson/chapter6_1/repository/ent/order"
 	"go-web/lesson/chapter6_1/repository/ent/user"
 
@@ -24,10 +24,10 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
-	// Goods is the client for interacting with the Goods builders.
-	Goods *GoodsClient
-	// GoodsCategory is the client for interacting with the GoodsCategory builders.
-	GoodsCategory *GoodsCategoryClient
+	// Item is the client for interacting with the Item builders.
+	Item *ItemClient
+	// ItemCategory is the client for interacting with the ItemCategory builders.
+	ItemCategory *ItemCategoryClient
 	// Order is the client for interacting with the Order builders.
 	Order *OrderClient
 	// User is the client for interacting with the User builders.
@@ -45,8 +45,8 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
-	c.Goods = NewGoodsClient(c.config)
-	c.GoodsCategory = NewGoodsCategoryClient(c.config)
+	c.Item = NewItemClient(c.config)
+	c.ItemCategory = NewItemCategoryClient(c.config)
 	c.Order = NewOrderClient(c.config)
 	c.User = NewUserClient(c.config)
 }
@@ -80,12 +80,12 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:           ctx,
-		config:        cfg,
-		Goods:         NewGoodsClient(cfg),
-		GoodsCategory: NewGoodsCategoryClient(cfg),
-		Order:         NewOrderClient(cfg),
-		User:          NewUserClient(cfg),
+		ctx:          ctx,
+		config:       cfg,
+		Item:         NewItemClient(cfg),
+		ItemCategory: NewItemCategoryClient(cfg),
+		Order:        NewOrderClient(cfg),
+		User:         NewUserClient(cfg),
 	}, nil
 }
 
@@ -103,18 +103,18 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		config:        cfg,
-		Goods:         NewGoodsClient(cfg),
-		GoodsCategory: NewGoodsCategoryClient(cfg),
-		Order:         NewOrderClient(cfg),
-		User:          NewUserClient(cfg),
+		config:       cfg,
+		Item:         NewItemClient(cfg),
+		ItemCategory: NewItemCategoryClient(cfg),
+		Order:        NewOrderClient(cfg),
+		User:         NewUserClient(cfg),
 	}, nil
 }
 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		Goods.
+//		Item.
 //		Query().
 //		Count(ctx)
 //
@@ -137,90 +137,90 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
-	c.Goods.Use(hooks...)
-	c.GoodsCategory.Use(hooks...)
+	c.Item.Use(hooks...)
+	c.ItemCategory.Use(hooks...)
 	c.Order.Use(hooks...)
 	c.User.Use(hooks...)
 }
 
-// GoodsClient is a client for the Goods schema.
-type GoodsClient struct {
+// ItemClient is a client for the Item schema.
+type ItemClient struct {
 	config
 }
 
-// NewGoodsClient returns a client for the Goods from the given config.
-func NewGoodsClient(c config) *GoodsClient {
-	return &GoodsClient{config: c}
+// NewItemClient returns a client for the Item from the given config.
+func NewItemClient(c config) *ItemClient {
+	return &ItemClient{config: c}
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `goods.Hooks(f(g(h())))`.
-func (c *GoodsClient) Use(hooks ...Hook) {
-	c.hooks.Goods = append(c.hooks.Goods, hooks...)
+// A call to `Use(f, g, h)` equals to `item.Hooks(f(g(h())))`.
+func (c *ItemClient) Use(hooks ...Hook) {
+	c.hooks.Item = append(c.hooks.Item, hooks...)
 }
 
-// Create returns a create builder for Goods.
-func (c *GoodsClient) Create() *GoodsCreate {
-	mutation := newGoodsMutation(c.config, OpCreate)
-	return &GoodsCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Create returns a create builder for Item.
+func (c *ItemClient) Create() *ItemCreate {
+	mutation := newItemMutation(c.config, OpCreate)
+	return &ItemCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// CreateBulk returns a builder for creating a bulk of Goods entities.
-func (c *GoodsClient) CreateBulk(builders ...*GoodsCreate) *GoodsCreateBulk {
-	return &GoodsCreateBulk{config: c.config, builders: builders}
+// CreateBulk returns a builder for creating a bulk of Item entities.
+func (c *ItemClient) CreateBulk(builders ...*ItemCreate) *ItemCreateBulk {
+	return &ItemCreateBulk{config: c.config, builders: builders}
 }
 
-// Update returns an update builder for Goods.
-func (c *GoodsClient) Update() *GoodsUpdate {
-	mutation := newGoodsMutation(c.config, OpUpdate)
-	return &GoodsUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Update returns an update builder for Item.
+func (c *ItemClient) Update() *ItemUpdate {
+	mutation := newItemMutation(c.config, OpUpdate)
+	return &ItemUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *GoodsClient) UpdateOne(_go *Goods) *GoodsUpdateOne {
-	mutation := newGoodsMutation(c.config, OpUpdateOne, withGoods(_go))
-	return &GoodsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *ItemClient) UpdateOne(i *Item) *ItemUpdateOne {
+	mutation := newItemMutation(c.config, OpUpdateOne, withItem(i))
+	return &ItemUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *GoodsClient) UpdateOneID(id int) *GoodsUpdateOne {
-	mutation := newGoodsMutation(c.config, OpUpdateOne, withGoodsID(id))
-	return &GoodsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *ItemClient) UpdateOneID(id int) *ItemUpdateOne {
+	mutation := newItemMutation(c.config, OpUpdateOne, withItemID(id))
+	return &ItemUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// Delete returns a delete builder for Goods.
-func (c *GoodsClient) Delete() *GoodsDelete {
-	mutation := newGoodsMutation(c.config, OpDelete)
-	return &GoodsDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Delete returns a delete builder for Item.
+func (c *ItemClient) Delete() *ItemDelete {
+	mutation := newItemMutation(c.config, OpDelete)
+	return &ItemDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // DeleteOne returns a delete builder for the given entity.
-func (c *GoodsClient) DeleteOne(_go *Goods) *GoodsDeleteOne {
-	return c.DeleteOneID(_go.ID)
+func (c *ItemClient) DeleteOne(i *Item) *ItemDeleteOne {
+	return c.DeleteOneID(i.ID)
 }
 
 // DeleteOneID returns a delete builder for the given id.
-func (c *GoodsClient) DeleteOneID(id int) *GoodsDeleteOne {
-	builder := c.Delete().Where(goods.ID(id))
+func (c *ItemClient) DeleteOneID(id int) *ItemDeleteOne {
+	builder := c.Delete().Where(item.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
-	return &GoodsDeleteOne{builder}
+	return &ItemDeleteOne{builder}
 }
 
-// Query returns a query builder for Goods.
-func (c *GoodsClient) Query() *GoodsQuery {
-	return &GoodsQuery{
+// Query returns a query builder for Item.
+func (c *ItemClient) Query() *ItemQuery {
+	return &ItemQuery{
 		config: c.config,
 	}
 }
 
-// Get returns a Goods entity by its id.
-func (c *GoodsClient) Get(ctx context.Context, id int) (*Goods, error) {
-	return c.Query().Where(goods.ID(id)).Only(ctx)
+// Get returns a Item entity by its id.
+func (c *ItemClient) Get(ctx context.Context, id int) (*Item, error) {
+	return c.Query().Where(item.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *GoodsClient) GetX(ctx context.Context, id int) *Goods {
+func (c *ItemClient) GetX(ctx context.Context, id int) *Item {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -228,105 +228,105 @@ func (c *GoodsClient) GetX(ctx context.Context, id int) *Goods {
 	return obj
 }
 
-// QueryCategory queries the category edge of a Goods.
-func (c *GoodsClient) QueryCategory(_go *Goods) *GoodsCategoryQuery {
-	query := &GoodsCategoryQuery{config: c.config}
+// QueryCategory queries the category edge of a Item.
+func (c *ItemClient) QueryCategory(i *Item) *ItemCategoryQuery {
+	query := &ItemCategoryQuery{config: c.config}
 	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
-		id := _go.ID
+		id := i.ID
 		step := sqlgraph.NewStep(
-			sqlgraph.From(goods.Table, goods.FieldID, id),
-			sqlgraph.To(goodscategory.Table, goodscategory.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, goods.CategoryTable, goods.CategoryColumn),
+			sqlgraph.From(item.Table, item.FieldID, id),
+			sqlgraph.To(itemcategory.Table, itemcategory.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, item.CategoryTable, item.CategoryColumn),
 		)
-		fromV = sqlgraph.Neighbors(_go.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(i.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // Hooks returns the client hooks.
-func (c *GoodsClient) Hooks() []Hook {
-	return c.hooks.Goods
+func (c *ItemClient) Hooks() []Hook {
+	return c.hooks.Item
 }
 
-// GoodsCategoryClient is a client for the GoodsCategory schema.
-type GoodsCategoryClient struct {
+// ItemCategoryClient is a client for the ItemCategory schema.
+type ItemCategoryClient struct {
 	config
 }
 
-// NewGoodsCategoryClient returns a client for the GoodsCategory from the given config.
-func NewGoodsCategoryClient(c config) *GoodsCategoryClient {
-	return &GoodsCategoryClient{config: c}
+// NewItemCategoryClient returns a client for the ItemCategory from the given config.
+func NewItemCategoryClient(c config) *ItemCategoryClient {
+	return &ItemCategoryClient{config: c}
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `goodscategory.Hooks(f(g(h())))`.
-func (c *GoodsCategoryClient) Use(hooks ...Hook) {
-	c.hooks.GoodsCategory = append(c.hooks.GoodsCategory, hooks...)
+// A call to `Use(f, g, h)` equals to `itemcategory.Hooks(f(g(h())))`.
+func (c *ItemCategoryClient) Use(hooks ...Hook) {
+	c.hooks.ItemCategory = append(c.hooks.ItemCategory, hooks...)
 }
 
-// Create returns a create builder for GoodsCategory.
-func (c *GoodsCategoryClient) Create() *GoodsCategoryCreate {
-	mutation := newGoodsCategoryMutation(c.config, OpCreate)
-	return &GoodsCategoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Create returns a create builder for ItemCategory.
+func (c *ItemCategoryClient) Create() *ItemCategoryCreate {
+	mutation := newItemCategoryMutation(c.config, OpCreate)
+	return &ItemCategoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// CreateBulk returns a builder for creating a bulk of GoodsCategory entities.
-func (c *GoodsCategoryClient) CreateBulk(builders ...*GoodsCategoryCreate) *GoodsCategoryCreateBulk {
-	return &GoodsCategoryCreateBulk{config: c.config, builders: builders}
+// CreateBulk returns a builder for creating a bulk of ItemCategory entities.
+func (c *ItemCategoryClient) CreateBulk(builders ...*ItemCategoryCreate) *ItemCategoryCreateBulk {
+	return &ItemCategoryCreateBulk{config: c.config, builders: builders}
 }
 
-// Update returns an update builder for GoodsCategory.
-func (c *GoodsCategoryClient) Update() *GoodsCategoryUpdate {
-	mutation := newGoodsCategoryMutation(c.config, OpUpdate)
-	return &GoodsCategoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Update returns an update builder for ItemCategory.
+func (c *ItemCategoryClient) Update() *ItemCategoryUpdate {
+	mutation := newItemCategoryMutation(c.config, OpUpdate)
+	return &ItemCategoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *GoodsCategoryClient) UpdateOne(gc *GoodsCategory) *GoodsCategoryUpdateOne {
-	mutation := newGoodsCategoryMutation(c.config, OpUpdateOne, withGoodsCategory(gc))
-	return &GoodsCategoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *ItemCategoryClient) UpdateOne(ic *ItemCategory) *ItemCategoryUpdateOne {
+	mutation := newItemCategoryMutation(c.config, OpUpdateOne, withItemCategory(ic))
+	return &ItemCategoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *GoodsCategoryClient) UpdateOneID(id int) *GoodsCategoryUpdateOne {
-	mutation := newGoodsCategoryMutation(c.config, OpUpdateOne, withGoodsCategoryID(id))
-	return &GoodsCategoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *ItemCategoryClient) UpdateOneID(id int) *ItemCategoryUpdateOne {
+	mutation := newItemCategoryMutation(c.config, OpUpdateOne, withItemCategoryID(id))
+	return &ItemCategoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// Delete returns a delete builder for GoodsCategory.
-func (c *GoodsCategoryClient) Delete() *GoodsCategoryDelete {
-	mutation := newGoodsCategoryMutation(c.config, OpDelete)
-	return &GoodsCategoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Delete returns a delete builder for ItemCategory.
+func (c *ItemCategoryClient) Delete() *ItemCategoryDelete {
+	mutation := newItemCategoryMutation(c.config, OpDelete)
+	return &ItemCategoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // DeleteOne returns a delete builder for the given entity.
-func (c *GoodsCategoryClient) DeleteOne(gc *GoodsCategory) *GoodsCategoryDeleteOne {
-	return c.DeleteOneID(gc.ID)
+func (c *ItemCategoryClient) DeleteOne(ic *ItemCategory) *ItemCategoryDeleteOne {
+	return c.DeleteOneID(ic.ID)
 }
 
 // DeleteOneID returns a delete builder for the given id.
-func (c *GoodsCategoryClient) DeleteOneID(id int) *GoodsCategoryDeleteOne {
-	builder := c.Delete().Where(goodscategory.ID(id))
+func (c *ItemCategoryClient) DeleteOneID(id int) *ItemCategoryDeleteOne {
+	builder := c.Delete().Where(itemcategory.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
-	return &GoodsCategoryDeleteOne{builder}
+	return &ItemCategoryDeleteOne{builder}
 }
 
-// Query returns a query builder for GoodsCategory.
-func (c *GoodsCategoryClient) Query() *GoodsCategoryQuery {
-	return &GoodsCategoryQuery{
+// Query returns a query builder for ItemCategory.
+func (c *ItemCategoryClient) Query() *ItemCategoryQuery {
+	return &ItemCategoryQuery{
 		config: c.config,
 	}
 }
 
-// Get returns a GoodsCategory entity by its id.
-func (c *GoodsCategoryClient) Get(ctx context.Context, id int) (*GoodsCategory, error) {
-	return c.Query().Where(goodscategory.ID(id)).Only(ctx)
+// Get returns a ItemCategory entity by its id.
+func (c *ItemCategoryClient) Get(ctx context.Context, id int) (*ItemCategory, error) {
+	return c.Query().Where(itemcategory.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *GoodsCategoryClient) GetX(ctx context.Context, id int) *GoodsCategory {
+func (c *ItemCategoryClient) GetX(ctx context.Context, id int) *ItemCategory {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -334,25 +334,25 @@ func (c *GoodsCategoryClient) GetX(ctx context.Context, id int) *GoodsCategory {
 	return obj
 }
 
-// QueryGoods queries the goods edge of a GoodsCategory.
-func (c *GoodsCategoryClient) QueryGoods(gc *GoodsCategory) *GoodsQuery {
-	query := &GoodsQuery{config: c.config}
+// QueryItems queries the items edge of a ItemCategory.
+func (c *ItemCategoryClient) QueryItems(ic *ItemCategory) *ItemQuery {
+	query := &ItemQuery{config: c.config}
 	query.path = func(ctx context.Context) (fromV *sql.Selector, _ error) {
-		id := gc.ID
+		id := ic.ID
 		step := sqlgraph.NewStep(
-			sqlgraph.From(goodscategory.Table, goodscategory.FieldID, id),
-			sqlgraph.To(goods.Table, goods.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, goodscategory.GoodsTable, goodscategory.GoodsColumn),
+			sqlgraph.From(itemcategory.Table, itemcategory.FieldID, id),
+			sqlgraph.To(item.Table, item.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, itemcategory.ItemsTable, itemcategory.ItemsColumn),
 		)
-		fromV = sqlgraph.Neighbors(gc.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(ic.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // Hooks returns the client hooks.
-func (c *GoodsCategoryClient) Hooks() []Hook {
-	return c.hooks.GoodsCategory
+func (c *ItemCategoryClient) Hooks() []Hook {
+	return c.hooks.ItemCategory
 }
 
 // OrderClient is a client for the Order schema.

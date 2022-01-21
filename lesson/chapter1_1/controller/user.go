@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"regexp"
@@ -36,5 +35,5 @@ func (ctr *User) Login(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(mobile, code)
+	c.JSON(http.StatusBadRequest, gin.H{"mobile": mobile, "code": code})
 }

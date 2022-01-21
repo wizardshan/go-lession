@@ -5,8 +5,8 @@ package ent
 import (
 	"errors"
 	"fmt"
-	"go-web/lesson/chapter6_1/repository/ent/goods"
-	"go-web/lesson/chapter6_1/repository/ent/goodscategory"
+	"go-web/lesson/chapter6_1/repository/ent/item"
+	"go-web/lesson/chapter6_1/repository/ent/itemcategory"
 	"go-web/lesson/chapter6_1/repository/ent/order"
 	"go-web/lesson/chapter6_1/repository/ent/user"
 
@@ -32,10 +32,10 @@ type OrderFunc func(*sql.Selector)
 // columnChecker returns a function indicates if the column exists in the given column.
 func columnChecker(table string) func(string) error {
 	checks := map[string]func(string) bool{
-		goods.Table:         goods.ValidColumn,
-		goodscategory.Table: goodscategory.ValidColumn,
-		order.Table:         order.ValidColumn,
-		user.Table:          user.ValidColumn,
+		item.Table:         item.ValidColumn,
+		itemcategory.Table: itemcategory.ValidColumn,
+		order.Table:        order.ValidColumn,
+		user.Table:         user.ValidColumn,
 	}
 	check, ok := checks[table]
 	if !ok {

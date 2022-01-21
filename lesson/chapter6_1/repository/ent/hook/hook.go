@@ -8,28 +8,28 @@ import (
 	"go-web/lesson/chapter6_1/repository/ent"
 )
 
-// The GoodsFunc type is an adapter to allow the use of ordinary
-// function as Goods mutator.
-type GoodsFunc func(context.Context, *ent.GoodsMutation) (ent.Value, error)
+// The ItemFunc type is an adapter to allow the use of ordinary
+// function as Item mutator.
+type ItemFunc func(context.Context, *ent.ItemMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f GoodsFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.GoodsMutation)
+func (f ItemFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.ItemMutation)
 	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.GoodsMutation", m)
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ItemMutation", m)
 	}
 	return f(ctx, mv)
 }
 
-// The GoodsCategoryFunc type is an adapter to allow the use of ordinary
-// function as GoodsCategory mutator.
-type GoodsCategoryFunc func(context.Context, *ent.GoodsCategoryMutation) (ent.Value, error)
+// The ItemCategoryFunc type is an adapter to allow the use of ordinary
+// function as ItemCategory mutator.
+type ItemCategoryFunc func(context.Context, *ent.ItemCategoryMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f GoodsCategoryFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.GoodsCategoryMutation)
+func (f ItemCategoryFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.ItemCategoryMutation)
 	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.GoodsCategoryMutation", m)
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ItemCategoryMutation", m)
 	}
 	return f(ctx, mv)
 }

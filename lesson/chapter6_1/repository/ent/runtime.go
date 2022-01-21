@@ -3,8 +3,8 @@
 package ent
 
 import (
-	"go-web/lesson/chapter6_1/repository/ent/goods"
-	"go-web/lesson/chapter6_1/repository/ent/goodscategory"
+	"go-web/lesson/chapter6_1/repository/ent/item"
+	"go-web/lesson/chapter6_1/repository/ent/itemcategory"
 	"go-web/lesson/chapter6_1/repository/ent/order"
 	"go-web/lesson/chapter6_1/repository/ent/schema"
 	"go-web/lesson/chapter6_1/repository/ent/user"
@@ -15,36 +15,36 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
-	goodsMixin := schema.Goods{}.Mixin()
-	goodsMixinFields0 := goodsMixin[0].Fields()
-	_ = goodsMixinFields0
-	goodsFields := schema.Goods{}.Fields()
-	_ = goodsFields
-	// goodsDescCreateTime is the schema descriptor for create_time field.
-	goodsDescCreateTime := goodsMixinFields0[0].Descriptor()
-	// goods.DefaultCreateTime holds the default value on creation for the create_time field.
-	goods.DefaultCreateTime = goodsDescCreateTime.Default.(func() time.Time)
-	// goodsDescUpdateTime is the schema descriptor for update_time field.
-	goodsDescUpdateTime := goodsMixinFields0[1].Descriptor()
-	// goods.DefaultUpdateTime holds the default value on creation for the update_time field.
-	goods.DefaultUpdateTime = goodsDescUpdateTime.Default.(func() time.Time)
-	// goods.UpdateDefaultUpdateTime holds the default value on update for the update_time field.
-	goods.UpdateDefaultUpdateTime = goodsDescUpdateTime.UpdateDefault.(func() time.Time)
-	goodscategoryMixin := schema.GoodsCategory{}.Mixin()
-	goodscategoryMixinFields0 := goodscategoryMixin[0].Fields()
-	_ = goodscategoryMixinFields0
-	goodscategoryFields := schema.GoodsCategory{}.Fields()
-	_ = goodscategoryFields
-	// goodscategoryDescCreateTime is the schema descriptor for create_time field.
-	goodscategoryDescCreateTime := goodscategoryMixinFields0[0].Descriptor()
-	// goodscategory.DefaultCreateTime holds the default value on creation for the create_time field.
-	goodscategory.DefaultCreateTime = goodscategoryDescCreateTime.Default.(func() time.Time)
-	// goodscategoryDescUpdateTime is the schema descriptor for update_time field.
-	goodscategoryDescUpdateTime := goodscategoryMixinFields0[1].Descriptor()
-	// goodscategory.DefaultUpdateTime holds the default value on creation for the update_time field.
-	goodscategory.DefaultUpdateTime = goodscategoryDescUpdateTime.Default.(func() time.Time)
-	// goodscategory.UpdateDefaultUpdateTime holds the default value on update for the update_time field.
-	goodscategory.UpdateDefaultUpdateTime = goodscategoryDescUpdateTime.UpdateDefault.(func() time.Time)
+	itemMixin := schema.Item{}.Mixin()
+	itemMixinFields0 := itemMixin[0].Fields()
+	_ = itemMixinFields0
+	itemFields := schema.Item{}.Fields()
+	_ = itemFields
+	// itemDescCreateTime is the schema descriptor for create_time field.
+	itemDescCreateTime := itemMixinFields0[0].Descriptor()
+	// item.DefaultCreateTime holds the default value on creation for the create_time field.
+	item.DefaultCreateTime = itemDescCreateTime.Default.(func() time.Time)
+	// itemDescUpdateTime is the schema descriptor for update_time field.
+	itemDescUpdateTime := itemMixinFields0[1].Descriptor()
+	// item.DefaultUpdateTime holds the default value on creation for the update_time field.
+	item.DefaultUpdateTime = itemDescUpdateTime.Default.(func() time.Time)
+	// item.UpdateDefaultUpdateTime holds the default value on update for the update_time field.
+	item.UpdateDefaultUpdateTime = itemDescUpdateTime.UpdateDefault.(func() time.Time)
+	itemcategoryMixin := schema.ItemCategory{}.Mixin()
+	itemcategoryMixinFields0 := itemcategoryMixin[0].Fields()
+	_ = itemcategoryMixinFields0
+	itemcategoryFields := schema.ItemCategory{}.Fields()
+	_ = itemcategoryFields
+	// itemcategoryDescCreateTime is the schema descriptor for create_time field.
+	itemcategoryDescCreateTime := itemcategoryMixinFields0[0].Descriptor()
+	// itemcategory.DefaultCreateTime holds the default value on creation for the create_time field.
+	itemcategory.DefaultCreateTime = itemcategoryDescCreateTime.Default.(func() time.Time)
+	// itemcategoryDescUpdateTime is the schema descriptor for update_time field.
+	itemcategoryDescUpdateTime := itemcategoryMixinFields0[1].Descriptor()
+	// itemcategory.DefaultUpdateTime holds the default value on creation for the update_time field.
+	itemcategory.DefaultUpdateTime = itemcategoryDescUpdateTime.Default.(func() time.Time)
+	// itemcategory.UpdateDefaultUpdateTime holds the default value on update for the update_time field.
+	itemcategory.UpdateDefaultUpdateTime = itemcategoryDescUpdateTime.UpdateDefault.(func() time.Time)
 	orderMixin := schema.Order{}.Mixin()
 	orderMixinFields0 := orderMixin[0].Fields()
 	_ = orderMixinFields0

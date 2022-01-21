@@ -31,15 +31,15 @@ func main() {
 
 	engine := gin.New()
 
-	repoGoods := repository.NewGoods(client)
-	ctrGoods := controller.NewGoods(repoGoods)
-	engine.GET("/goods/category", ctrGoods.Category)
-	engine.GET("/v1/goods", ctrGoods.V1List)
-	engine.GET("/v2/goods", ctrGoods.V2List)
+	repoItem := repository.NewItem(client)
+	ctrItem := controller.NewGoods(repoItem)
+	engine.GET("/item/category", ctrItem.Category)
+	engine.GET("/v1/item", ctrItem.V1List)
+	engine.GET("/v2/item", ctrItem.V2List)
 
-	engine.GET("/goods/:id", ctrGoods.Get)
-	engine.GET("/goods", ctrGoods.List)
-	engine.POST("/goods", ctrGoods.Create)
+	engine.GET("/item/:id", ctrItem.Get)
+	engine.GET("/item", ctrItem.List)
+	engine.POST("/item", ctrItem.Create)
 
 	engine.Run()
 }

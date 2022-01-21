@@ -5,7 +5,7 @@ import (
 	"regexp"
 )
 
-func IsMobile(mobile string) error {
+func CheckMobile(mobile string) error {
 	if mobile == "" {
 		return errors.New("手机号不能为空")
 	}

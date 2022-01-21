@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"go-web/lesson/chapter1_4/request"
 	"net/http"
@@ -15,7 +14,8 @@ func (ctr *User) Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	fmt.Println(request.Mobile, request.Code)
+
+	c.JSON(http.StatusBadRequest, gin.H{"data": request})
 }
 
 func (ctr *User) Register(c *gin.Context) {
@@ -25,5 +25,5 @@ func (ctr *User) Register(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(request.Mobile, request.Code, request.Password, request.RePassword, request.Nickname, request.Birthday)
+	c.JSON(http.StatusBadRequest, gin.H{"data": request})
 }

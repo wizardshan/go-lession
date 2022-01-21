@@ -5,6 +5,7 @@ import (
 	"go-web/lesson/chapter4_1/domain"
 	"go-web/lesson/chapter4_1/pkg/mapper"
 	"go-web/lesson/chapter4_1/repository/do"
+	"go-web/lesson/chapter4_1/repository/entity"
 	"time"
 )
 
@@ -18,7 +19,7 @@ func NewUser() *User {
 }
 
 func (repo *User) V1List(ctx context.Context) []*domain.User {
-	users := []*do.User{
+	users := []*entity.User{
 		{ID: 1, Nickname: "用户昵称", HeaderImage: "header.jpg", Money: 12345, CreateTime: time.Now()},
 		{ID: 1, Nickname: "用户昵称", HeaderImage: "header.jpg", Money: 12345, CreateTime: time.Now()},
 	}
@@ -29,7 +30,7 @@ func (repo *User) V1List(ctx context.Context) []*domain.User {
 }
 
 func (repo *User) V2List(ctx context.Context) []*domain.User {
-	users := []*do.User{
+	users := []*entity.User{
 		{ID: 1, Nickname: "用户昵称", HeaderImage: "header.jpg", Money: 12345, CreateTime: time.Now()},
 		{ID: 1, Nickname: "用户昵称", HeaderImage: "header.jpg", Money: 12345, CreateTime: time.Now()},
 	}
@@ -40,7 +41,7 @@ func (repo *User) V2List(ctx context.Context) []*domain.User {
 }
 
 func (repo *User) Get(ctx context.Context) *domain.User {
-	user := &do.User{ID: 1, Nickname: "用户昵称", HeaderImage: "header.jpg", Money: 12345, CreateTime: time.Now()}
+	user := &entity.User{ID: 1, Nickname: "用户昵称", HeaderImage: "header.jpg", Money: 12345, CreateTime: time.Now()}
 
 	domain := new(domain.User)
 	mapper.Map(&domain, user)
@@ -49,7 +50,7 @@ func (repo *User) Get(ctx context.Context) *domain.User {
 
 func (repo *User) Register(ctx context.Context, user *domain.User) *domain.User {
 
-	do := new(do.User)
+	do := new(entity.User)
 	do.ID = 1
 	do.Mobile = user.Mobile
 	do.Password = user.Password

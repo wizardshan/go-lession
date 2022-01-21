@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	validator "github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"go-web/lesson/chapter1_2/request"
@@ -22,5 +21,5 @@ func (ctr *Captcha) Send(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(request)
+	c.JSON(http.StatusBadRequest, gin.H{"data": request})
 }

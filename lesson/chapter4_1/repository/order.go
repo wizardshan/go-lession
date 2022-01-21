@@ -4,6 +4,7 @@ import (
 	"context"
 	"go-web/lesson/chapter4_1/domain"
 	"go-web/lesson/chapter4_1/repository/do"
+	"go-web/lesson/chapter4_1/repository/entity"
 	"go-web/lesson/chapter4_1/request"
 	"time"
 )
@@ -16,24 +17,24 @@ func NewOrder() *Order {
 }
 
 func (repo *Order) Get(ctx context.Context, id int) *domain.Order {
-	order := &do.Order{ID: 1, UserID: 1, SN: "123456", CreateTime: time.Now()}
-	return order.Mapping()
+	order := &entity.Order{ID: 1, UserID: 1, SN: "123456", CreateTime: time.Now()}
+	return order.ToDomain()
 }
 
 func (repo *Order) My(ctx context.Context) domain.Orders {
-	orders := do.Orders{
+	orders := entity.Orders{
 		{ID: 1, UserID: 1, SN: "123456", CreateTime: time.Now()},
 		{ID: 2, UserID: 1, SN: "987654", CreateTime: time.Now()},
 	}
 
-	return orders.Mapping()
+	return orders.ToDomain()
 }
 
 func (repo *Order) List(ctx context.Context, request *request.OrderList) domain.Orders {
-	orders := do.Orders{
+	orders := entity.Orders{
 		{ID: 1, UserID: 1, SN: "123456", CreateTime: time.Now()},
 		{ID: 2, UserID: 1, SN: "987654", CreateTime: time.Now()},
 	}
 
-	return orders.Mapping()
+	return orders.ToDomain()
 }
