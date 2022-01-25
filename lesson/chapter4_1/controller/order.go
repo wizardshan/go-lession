@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"go-web/lesson/chapter4_1/repository"
 	"go-web/lesson/chapter4_1/request"
@@ -30,25 +29,27 @@ func (ctr *Order) Get(c *gin.Context) {
 	order := ctr.repo.Get(c.Request.Context(), request.ID)
 
 	resp := new(response.OrderGet)
-	c.JSON(http.StatusOK, gin.H{"data": resp.Mapping(order)})
+	c.JSON(http.StatusOK, gin.H{"data": resp.Map(order)})
 }
 
 func (ctr *Order) My(c *gin.Context) {
 
 	orders := ctr.repo.My(c.Request.Context())
 
-	c.JSON(http.StatusOK, gin.H{"data": orders})
+	resp := response.OrderMys{}
+	c.JSON(http.StatusOK, gin.H{"data": resp.Map(orders)})
 }
 
 func (ctr *Order) List(c *gin.Context) {
 
 	request := new(request.OrderList)
 	if err := c.ShouldB(request); err != nil {
-		fmt.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	orders := ctr.repo.List(c.Request.Context(), request)
-	c.JSON(http.StatusOK, gin.H{"data": orders})
+
+	resp := response.OrderLists{}
+	c.JSON(http.StatusOK, gin.H{"data": resp.Map(orders)})
 }

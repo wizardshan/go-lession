@@ -15,14 +15,14 @@ type Order struct {
 	CreateTime time.Time
 }
 
-func (do *Order) ToDomain() (dom *domain.Order) {
-	dom = new(domain.Order)
-	mapper.Map(&dom, do)
-	return
+func (ent *Order) ToDomain() *domain.Order {
+	dom := new(domain.Order)
+	mapper.Map(&dom, ent)
+	return dom
 }
 
-func (do *Orders) ToDomain() (dom domain.Orders) {
-	dom = domain.Orders{}
-	mapper.Map(&dom, do)
-	return
+func (ent *Orders) ToDomain() *domain.Orders {
+	dom := domain.Orders{}
+	mapper.Map(&dom, ent)
+	return &dom
 }

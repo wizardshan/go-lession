@@ -20,7 +20,7 @@ func (repo *Order) Get(ctx context.Context, id int) *domain.Order {
 	return order.ToDomain()
 }
 
-func (repo *Order) My(ctx context.Context) domain.Orders {
+func (repo *Order) My(ctx context.Context) *domain.Orders {
 	orders := entity.Orders{
 		{ID: 1, UserID: 1, SN: "123456", CreateTime: time.Now()},
 		{ID: 2, UserID: 1, SN: "987654", CreateTime: time.Now()},
@@ -29,7 +29,7 @@ func (repo *Order) My(ctx context.Context) domain.Orders {
 	return orders.ToDomain()
 }
 
-func (repo *Order) List(ctx context.Context, request *request.OrderList) domain.Orders {
+func (repo *Order) List(ctx context.Context, request *request.OrderList) *domain.Orders {
 	orders := entity.Orders{
 		{ID: 1, UserID: 1, SN: "123456", CreateTime: time.Now()},
 		{ID: 2, UserID: 1, SN: "987654", CreateTime: time.Now()},

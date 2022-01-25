@@ -17,7 +17,7 @@ type OrderGet struct {
 	Order
 }
 
-func (resp *OrderGet) Mapping(order *domain.Order) *OrderGet  {
+func (resp *OrderGet) Map(order *domain.Order) *OrderGet  {
 	mapper.Map(&resp, order)
 	return resp
 }
@@ -26,15 +26,21 @@ type OrderMy struct {
 	Order
 }
 
-func (resp *OrderMy) Mapping() {
+type OrderMys []*OrderMy
 
+func (resp *OrderMys) Map(orders *domain.Orders) *OrderMys {
+	mapper.Map(&resp, orders)
+	return resp
 }
 
 type OrderList struct {
 	Order
 }
 
-func (resp *OrderList) Mapping() {
+type OrderLists []*OrderList
 
+func (resp *OrderLists) Map(orders *domain.Orders) *OrderLists {
+	mapper.Map(&resp, orders)
+	return resp
 }
 

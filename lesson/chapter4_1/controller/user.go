@@ -3,7 +3,6 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"go-web/lesson/chapter4_1/domain"
-	"go-web/lesson/chapter4_1/pkg/mapper"
 	"go-web/lesson/chapter4_1/repository"
 	"go-web/lesson/chapter4_1/request"
 	"go-web/lesson/chapter4_1/response"
@@ -32,7 +31,6 @@ func (ctr *User) Register(c *gin.Context) {
 
 	data := ctr.repo.Register(c.Request.Context(), user)
 
-	response := new(response.User)
-	mapper.Map(&response, data)
-	c.JSON(http.StatusOK, gin.H{"data": response})
+	response := new(response.UserRegister)
+	c.JSON(http.StatusOK, gin.H{"data": response.Map(data)})
 }
