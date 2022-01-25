@@ -8,9 +8,14 @@ import (
 
 type Column struct{}
 
+func NewColumn() *Column {
+	ctr := new(Column)
+	return ctr
+}
+
 func (ctr *Column) Create(c *gin.Context) {
-	var request request.ColumnCreate
-	if err := c.ShouldB(&request); err != nil {
+	request := new(request.ColumnCreate)
+	if err := c.ShouldB(request); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -19,8 +24,8 @@ func (ctr *Column) Create(c *gin.Context) {
 }
 
 func (ctr *Column) Detail(c *gin.Context) {
-	var request request.ColumnDetail
-	if err := c.ShouldB(&request); err != nil {
+	request := new(request.ColumnDetail)
+	if err := c.ShouldB(request); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

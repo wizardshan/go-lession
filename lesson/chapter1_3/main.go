@@ -8,7 +8,7 @@ import (
 func main() {
 	engine := gin.New()
 
-	ctrUser := new(controller.User)
+	ctrUser := controller.NewUser()
 	engine.POST("/user/register", ctrUser.Register)
 	engine.Run()
 }

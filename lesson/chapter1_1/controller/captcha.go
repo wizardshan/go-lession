@@ -8,6 +8,11 @@ import (
 
 type Captcha struct{}
 
+func NewCaptcha() *Captcha {
+	ctr := new(Captcha)
+	return ctr
+}
+
 func (ctr *Captcha) Send(c *gin.Context) {
 	mobile := c.PostForm("mobile")
 

@@ -1,6 +1,8 @@
 package response
 
 import (
+	"go-web/lesson/chapter4_1/domain"
+	"go-web/lesson/chapter4_1/pkg/mapper"
 	"time"
 )
 
@@ -15,11 +17,24 @@ type OrderGet struct {
 	Order
 }
 
+func (resp *OrderGet) Mapping(order *domain.Order) *OrderGet  {
+	mapper.Map(&resp, order)
+	return resp
+}
+
 type OrderMy struct {
 	Order
 }
 
+func (resp *OrderMy) Mapping() {
+
+}
+
 type OrderList struct {
 	Order
+}
+
+func (resp *OrderList) Mapping() {
+
 }
 

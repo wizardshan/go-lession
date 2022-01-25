@@ -8,7 +8,7 @@ import (
 func main() {
 	engine := gin.New()
 
-	ctrColumn := new(controller.Column)
+	ctrColumn := controller.NewColumn()
 	engine.POST("/column/create", ctrColumn.Create)
 	engine.GET("/column", ctrColumn.Detail)
 	engine.Run()

@@ -4,7 +4,6 @@ import (
 	"context"
 	"go-web/lesson/chapter4_1/domain"
 	"go-web/lesson/chapter4_1/pkg/mapper"
-	"go-web/lesson/chapter4_1/repository/do"
 	"go-web/lesson/chapter4_1/repository/entity"
 	"time"
 )
@@ -48,18 +47,17 @@ func (repo *User) Get(ctx context.Context) *domain.User {
 	return domain
 }
 
-func (repo *User) Register(ctx context.Context, user *domain.User) *domain.User {
+func (repo *User) Register(ctx context.Context, userDomain *domain.User) *domain.User {
 
-	do := new(entity.User)
-	do.ID = 1
-	do.Mobile = user.Mobile
-	do.Password = user.Password
-	do.HeaderImage = user.HeaderImage
-	do.CreateTime = user.CreateTime
-	// do对象入库
+	userEntity := new(entity.User)
+	userEntity.ID = 1
+	userEntity.Mobile = userDomain.Mobile
+	userEntity.Password = userDomain.Password
+	userEntity.HeaderImage = userDomain.HeaderImage
+	userEntity.CreateTime = userDomain.CreateTime
+	// entity对象入库
 
-	domain := new(domain.User)
-	mapper.Map(&domain, do)
-	return domain
+	mapper.Map(&userEntity, userDomain)
+	return userDomain
 }
 

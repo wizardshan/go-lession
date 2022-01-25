@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"go-web/lesson/chapter4_1/repository"
 	"go-web/lesson/chapter4_1/request"
+	"go-web/lesson/chapter4_1/response"
 	"net/http"
 )
 
@@ -27,14 +28,16 @@ func (ctr *Order) Get(c *gin.Context) {
 	}
 
 	order := ctr.repo.Get(c.Request.Context(), request.ID)
-	c.JSON(http.StatusOK, gin.H{"data": order.MappingGet()})
+
+	resp := new(response.OrderGet)
+	c.JSON(http.StatusOK, gin.H{"data": resp.Mapping(order)})
 }
 
 func (ctr *Order) My(c *gin.Context) {
 
 	orders := ctr.repo.My(c.Request.Context())
 
-	c.JSON(http.StatusOK, gin.H{"data": orders.MappingMy()})
+	c.JSON(http.StatusOK, gin.H{"data": orders})
 }
 
 func (ctr *Order) List(c *gin.Context) {
@@ -47,5 +50,5 @@ func (ctr *Order) List(c *gin.Context) {
 	}
 
 	orders := ctr.repo.List(c.Request.Context(), request)
-	c.JSON(http.StatusOK, gin.H{"data": orders.MappingList()})
+	c.JSON(http.StatusOK, gin.H{"data": orders})
 }

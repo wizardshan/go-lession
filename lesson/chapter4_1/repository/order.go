@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"go-web/lesson/chapter4_1/domain"
-	"go-web/lesson/chapter4_1/repository/do"
 	"go-web/lesson/chapter4_1/repository/entity"
 	"go-web/lesson/chapter4_1/request"
 	"time"

@@ -6,26 +6,39 @@ import (
 	"time"
 )
 
-const (
-	CaptchaCategoryLogin = "login"
-	CaptchaCategoryResetPassword = "resetPassword"
-)
+type contentTemplate interface {
+	tpl() string
+}
+
+type LoginContentTemplate struct {
+}
+
+func (*LoginContentTemplate) tpl() string {
+	return "%s（登录验证码，请完成验证），如非本人操作，请忽略本短信。"
+}
+
+type ResetPasswordContentTemplate struct {
+}
+
+func (*ResetPasswordContentTemplate) tpl() string {
+	return "%s （重置密码验证码，请完成重置），如非本人操作，请忽略本短信。"
+}
+
 type Captcha struct {
 	Code string
 	Mobile string
 	Content string
 	ExpireTime time.Time
 
-	Category string
+	contentTPL contentTemplate
 }
 
-func NewCaptcha(category string) *Captcha {
+func NewCaptcha(tpl contentTemplate) *Captcha {
 	c := new(Captcha)
-	c.Category = category
+	c.contentTPL = tpl
 	return c
 }
 
-// 面向过程或者是面向功能点
 func (dom *Captcha) Generate(mobile string) {
 	dom.Mobile = mobile
 	dom.generateCode()
@@ -38,7 +51,7 @@ func (dom *Captcha) generateCode() {
 }
 
 func (dom *Captcha) generateContent() {
-	dom.Content = fmt.Sprintf(dom.getContent(dom.Category), dom.Code)
+	dom.Content = fmt.Sprintf(dom.contentTPL.tpl(), dom.Code)
 }
 
 func (dom *Captcha) generateExpireTime() {
@@ -47,17 +60,6 @@ func (dom *Captcha) generateExpireTime() {
 
 func (dom *Captcha) expireMinutes() int {
 	return 5
-}
-
-func (dom *Captcha) getContent(category string) string {
-	return dom.contentsByCategory()[category]
-}
-
-func (dom *Captcha) contentsByCategory() map[string]string {
-	return map[string]string {
-		CaptchaCategoryLogin : "%s（登录验证码，请完成验证），如非本人操作，请忽略本短信。",
-		CaptchaCategoryResetPassword : "%s （重置密码验证码，请完成重置），如非本人操作，请忽略本短信。",
-	}
 }
 
 

@@ -13,6 +13,11 @@ import (
 
 type User struct{}
 
+func NewUser() *User {
+	ctr := new(User)
+	return ctr
+}
+
 func (ctr *User) Cash(c *gin.Context) {
 	var request request.UserCash
 	if err := c.ShouldBind(&request); err != nil {

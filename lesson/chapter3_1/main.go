@@ -8,7 +8,7 @@ import (
 func main() {
 	engine := gin.New()
 
-	ctrUser := new(controller.User)
+	ctrUser := controller.NewUser()
 	engine.POST("/user/cash", ctrUser.Cash)
 	engine.GET("/users/:id", ctrUser.Info)
 	engine.POST("/user/update", ctrUser.Update)

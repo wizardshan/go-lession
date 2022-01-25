@@ -10,6 +10,11 @@ import (
 
 type Article struct{}
 
+func NewArticle() *Article {
+	ctr := new(Article)
+	return ctr
+}
+
 func (ctr *Article) List(c *gin.Context) {
 
 	articles := []*domain.Article{

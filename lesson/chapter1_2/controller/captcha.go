@@ -9,9 +9,14 @@ import (
 
 type Captcha struct{}
 
+func NewCaptcha() *Captcha {
+	ctr := new(Captcha)
+	return ctr
+}
+
 func (ctr *Captcha) Send(c *gin.Context) {
-	var request request.Captcha
-	if err := c.ShouldBind(&request); err != nil {
+	request := new(request.Captcha)
+	if err := c.ShouldBind(request); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

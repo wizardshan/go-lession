@@ -9,9 +9,14 @@ import (
 
 type User struct{}
 
+func NewUser() *User {
+	ctr := new(User)
+	return ctr
+}
+
 func (ctr *User) Login(c *gin.Context) {
-	var request request.User
-	if err := c.ShouldBind(&request); err != nil {
+	request := new(request.User)
+	if err := c.ShouldBind(request); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

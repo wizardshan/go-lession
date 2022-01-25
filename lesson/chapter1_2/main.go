@@ -8,9 +8,11 @@ import (
 func main() {
 	engine := gin.New()
 
-	ctrUser := new(controller.User)
-	ctrCaptcha := new(controller.Captcha)
-	engine.POST("/captcha/send", ctrCaptcha.Send)
+	ctrUser := controller.NewUser()
 	engine.POST("/user/login", ctrUser.Login)
+
+	ctrCaptcha := controller.NewCaptcha()
+	engine.POST("/captcha/send", ctrCaptcha.Send)
+
 	engine.Run()
 }

@@ -8,6 +8,11 @@ import (
 
 type User struct{}
 
+func NewUser() *User {
+	ctr := new(User)
+	return ctr
+}
+
 func (ctr *User) Login(c *gin.Context) {
 	mobile := c.PostForm("mobile")
 	code := c.PostForm("code")

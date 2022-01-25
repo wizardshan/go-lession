@@ -16,8 +16,11 @@ type Captcha struct {
 // 面向过程或者是面向功能点
 func (dom *Captcha) Generate(mobile string) {
 	dom.Mobile = mobile
+	// 功能点1：生成随机四位数字
 	dom.generateCode()
+	// 功能点2：生成短信内容
 	dom.generateContent()
+	// 功能点3：生成过期时间
 	dom.generateExpireTime()
 }
 

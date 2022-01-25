@@ -8,7 +8,7 @@ import (
 func main() {
 	engine := gin.New()
 
-	ctrArticle := new(controller.Article)
+	ctrArticle := controller.NewArticle()
 	engine.GET("/articles", ctrArticle.List)
 	engine.GET("/articles/:id", ctrArticle.Detail)
 	engine.Run()
