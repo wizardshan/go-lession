@@ -25,7 +25,7 @@ func (ctr *Captcha) Send(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
+	//captcha := domain.NewCaptcha(request.Mobile)
 	captcha := domain.NewCaptcha(request.Mobile, domain.CaptchaResetPasswordContentTPL())
 	captcha.Generate()
 
