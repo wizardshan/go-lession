@@ -26,8 +26,8 @@ func (ctr *Captcha) Send(c *gin.Context) {
 		return
 	}
 
-	captcha := domain.NewCaptcha(new(domain.LoginContentTemplate))
-	captcha.Generate(request.Mobile)
+	captcha := domain.NewCaptcha(request.Mobile, new(domain.LoginContentTemplate))
+	captcha.Generate()
 
 	ctr.repo.Save(captcha)
 	sms.Send(captcha.Mobile, captcha.Content)

@@ -33,12 +33,42 @@ type Captcha struct {
 	contentTPL contentTemplate
 }
 
-func NewCaptcha(mobile string, tpl contentTemplate) *Captcha {
+
+type captchaAttributeSetter func(c *Captcha)
+
+func CaptchaLoginContentTPL() captchaAttributeSetter {
+	return func(c *Captcha) {
+		c.contentTPL = new(LoginContentTemplate)
+	}
+}
+
+func CaptchaResetPasswordContentTPL() captchaAttributeSetter {
+	return func(c *Captcha) {
+		c.contentTPL = new(ResetPasswordContentTemplate)
+	}
+}
+
+func NewCaptcha(mobile string, setters ...captchaAttributeSetter) *Captcha {
 	dom := new(Captcha)
 	dom.Mobile = mobile
-	dom.contentTPL = tpl
+
+	for _, f := range setters {
+		f(dom)
+	}
+
+	if dom.contentTPL == nil {
+		CaptchaLoginContentTPL()(dom)
+	}
+
 	return dom
 }
+
+//func NewCaptcha(mobile string, tpl contentTemplate) *Captcha {
+//	dom := new(Captcha)
+//	dom.Mobile = mobile
+//	dom.contentTPL = tpl
+//	return dom
+//}
 
 func (dom *Captcha) Generate() {
 	dom.generateCode()

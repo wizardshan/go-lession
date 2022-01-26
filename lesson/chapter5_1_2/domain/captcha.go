@@ -18,9 +18,14 @@ type Captcha struct {
 	ExpireTime time.Time
 }
 
-// 面向过程或者是面向功能点
-func (dom *Captcha) Generate(mobile string, category string) {
+func NewCaptcha(mobile string) *Captcha {
+	dom := new(Captcha)
 	dom.Mobile = mobile
+	return dom
+}
+
+// 面向过程或者是面向功能点
+func (dom *Captcha) Generate(category string) {
 	// 功能点1：生成随机四位数字
 	dom.generateCode()
 	// 功能点2：生成短信内容

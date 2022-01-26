@@ -20,15 +20,15 @@ type Captcha struct {
 	Category string
 }
 
-func NewCaptcha(category string) *Captcha {
-	c := new(Captcha)
-	c.Category = category
-	return c
+func NewCaptcha(mobile string, category string) *Captcha {
+	dom := new(Captcha)
+	dom.Mobile = mobile
+	dom.Category = category
+	return dom
 }
 
 // 面向过程或者是面向功能点
-func (dom *Captcha) Generate(mobile string) {
-	dom.Mobile = mobile
+func (dom *Captcha) Generate() {
 	dom.generateCode()
 	dom.generateContent()
 	dom.generateExpireTime()
@@ -39,7 +39,7 @@ func (dom *Captcha) generateCode() {
 }
 
 func (dom *Captcha) generateContent() {
-	dom.Content = fmt.Sprintf(dom.getContent(dom.Category), dom.Code)
+	dom.Content = fmt.Sprintf(dom.contentTemplate(dom.Category), dom.Code)
 }
 
 func (dom *Captcha) generateExpireTime() {
@@ -50,15 +50,13 @@ func (dom *Captcha) expireMinutes() int {
 	return 5
 }
 
-func (dom *Captcha) getContent(category string) string {
-	return dom.contentsByCategory()[category]
-}
-
-func (dom *Captcha) contentsByCategory() map[string]string {
-	return map[string]string {
-		CaptchaCategoryLogin : "%s（登录验证码，请完成验证），如非本人操作，请忽略本短信。",
-		CaptchaCategoryResetPassword : "%s （重置密码验证码，请完成重置），如非本人操作，请忽略本短信。",
+func (dom *Captcha) contentTemplate(category string) string {
+	switch category {
+	case CaptchaCategoryLogin:
+		return "%s（登录验证码，请完成验证），如非本人操作，请忽略本短信。"
+	case CaptchaCategoryResetPassword:
+		return "%s （重置密码验证码，请完成重置），如非本人操作，请忽略本短信。"
+	default:
+		return ""
 	}
 }
-
-

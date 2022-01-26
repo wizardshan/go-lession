@@ -2,10 +2,10 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-web/lesson/chapter5_1_1/domain"
-	"go-web/lesson/chapter5_1_1/pkg/sms"
-	"go-web/lesson/chapter5_1_1/repository"
-	"go-web/lesson/chapter5_1_1/request"
+	"go-web/lesson/chapter5_1_5/domain"
+	"go-web/lesson/chapter5_1_5/pkg/sms"
+	"go-web/lesson/chapter5_1_5/repository"
+	"go-web/lesson/chapter5_1_5/request"
 	"net/http"
 )
 
@@ -26,7 +26,7 @@ func (ctr *Captcha) Send(c *gin.Context) {
 		return
 	}
 
-	captcha := domain.NewCaptcha(request.Mobile)
+	captcha := domain.NewCaptcha(request.Mobile, domain.CaptchaResetPasswordContentTPL())
 	captcha.Generate()
 
 	ctr.repo.Save(captcha)
